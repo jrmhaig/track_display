@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Track:</strong>
+  <%= @node.track_id %>
+</p>
+
+<p>
+  <strong>Time:</strong>
+  <%= @node.time %>
+</p>
+
+<p>
+  <strong>Lat:</strong>
+  <%= @node.lat %>
+</p>
+
+<p>
+  <strong>Long:</strong>
+  <%= @node.long %>
+</p>
+
+<p>
+  <strong>Alt:</strong>
+  <%= @node.alt %>
+</p>
+
+<%= link_to 'Edit', edit_node_path(@node) %> |
+<%= link_to 'Back', nodes_path %>
