@@ -20,6 +20,14 @@
       </tr>
     <% end %>
   </tbody>
+
+  <div>
+    <dl>
+    <% @track_data.each do |t, c| -%>
+      <dt><%= t.content %></dt><dd><%= c.content %><dt>
+    <% end -%>
+    </dl>
+  </div>
 </table>
 
 <br>
