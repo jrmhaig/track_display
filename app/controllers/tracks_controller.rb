@@ -6,20 +6,7 @@ class TracksController < ApplicationController
   def index
     @tracks = Track.all
 
-    # Reading in kml file
-    # For the moment, just from a local file and display contents on the page
-    data = Nokogiri::XML(File.read(Rails.root.join("data/test.kml")).gsub(/gx:/, 'gxX'))
-
-    placemarks = {}
-
-    data.css('Placemark').each do |p|
-      placemarks[p.css('name').first.content] = p
-    end
-
-    tss = placemarks['Track'].css('when').to_ary
-    cds = placemarks['Track'].css('gxXcoord').to_ary
-
-    @track_data = tss.zip(cds)
+    @track_data = Track.track_from_kml(File.read(Rails.root.join("data/test.kml")))
   end
 
   # GET /tracks/1
