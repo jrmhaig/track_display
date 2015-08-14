@@ -1,22 +1,15 @@
+require 'kmllib'
+
 class Track < ActiveRecord::Base
-  def self.track_from_kml(kml)
-    data = Nokogiri::XML(kml.gsub(/gx:/, 'gxX'))
+  has_many :nodes
 
-    placemarks = {}
-
-    data.css('Placemark').each do |p|
-      placemarks[p.css('name').first.content] = p
+  def self.create_from_kml(kml)
+    track_data = KML.extract_track(kml)
+    t = Track.create
+    track_data.each do |time, p|
+      Node.create(time: time, lat: p[0], long: p[1], alt: p[2], track: t)
     end
-
-    tss = placemarks['Track'].css('when').to_ary
-    cds = placemarks['Track'].css('gxXcoord').to_ary
-
-    track = {}
-
-    tss.each_index do |i|
-      track[tss[i].content] = cds[i].content.split(/\s+/).map{ |d| d.to_f }
-    end
-
-    track
+    t
   end
+
 end
