@@ -1,7 +1,7 @@
 require 'kmllib'
 
 class Track < ActiveRecord::Base
-  has_many :nodes
+  has_many :nodes, dependent: :destroy
 
   def self.create_from_kml(kml)
     track_data = OldKML.extract_track(kml)

@@ -44,6 +44,8 @@ group :development, :test do
 
   gem 'rspec-rails', '~> 3.3.3'
   gem 'simplecov', '~> 0.10.0'
+
+  gem 'fabrication'
 end
 
 gem 'bootstrap-sass', '~> 3.2.0'

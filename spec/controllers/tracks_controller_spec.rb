@@ -140,6 +140,16 @@ RSpec.describe TracksController, :type => :controller do
       delete :destroy, {:id => track.to_param}, valid_session
       expect(response).to redirect_to(tracks_url)
     end
+
+    it "deletes nodes for the track" do
+      track = Fabricate(:track)
+      Fabricate(:node, track: track)
+      Fabricate(:node, track: track)
+      Fabricate(:node, track: track)
+      expect {
+        delete :destroy, {id: track.to_param}, valid_session
+      }.to change(Node, :count).by(-3)
+    end
   end
 
   describe "POST import" do
