@@ -160,6 +160,18 @@ RSpec.describe TracksController, :type => :controller do
         post :import, {file: 'spec/files/simple.kml'}, valid_session
         expect(response).to redirect_to(Track.last)
       end
+
+      it "creates 2 nodes" do
+        expect {
+          post :import, {file: 'spec/files/simple.kml'}, valid_session
+        }.to change(Node, :count).by(2)
+      end
+
+      it "creates 5 nodes" do
+        expect {
+          post :import, {file: 'spec/files/5nodes.kml'}, valid_session
+        }.to change(Node, :count).by(5)
+      end
     end
   end
 

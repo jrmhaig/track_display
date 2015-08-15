@@ -37,6 +37,12 @@ class TracksController < ApplicationController
 
     respond_to do |format|
       if @track.save
+        if @nodes
+          @nodes.each do |node_data|
+            node_data['track'] = @track
+            Node.create(node_data)
+          end
+        end
         format.html { redirect_to @track, notice: 'Track was successfully created.' }
         format.json { render :show, status: :created, location: @track }
       else
@@ -73,6 +79,7 @@ class TracksController < ApplicationController
   def import
     track_data = KML.new(params[:file])
     params[:track] = {title: track_data.name}
+    @nodes = track_data.nodes
     self.create
   end
 
