@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
   resources :nodes
-  resources :tracks
+  resources :tracks do
+    #get 'import/:file', on: :collection, action: 'import'
+    post 'import', on: :collection
+  end
   root 'tracks#index'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

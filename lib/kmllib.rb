@@ -1,4 +1,4 @@
-module KML
+module OldKML
   def self.extract_track(kml)
     data = Nokogiri::XML(kml.gsub(/gx:/, 'gxX'))
 

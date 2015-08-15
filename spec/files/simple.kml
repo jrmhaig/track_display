@@ -1,10 +1,3 @@
-require 'rails_helper'
-require 'kmllib'
-
-RSpec.describe 'kmllib' do
-  describe '#extract_track' do
-    it 'extracts a track from kml' do
-      kml = <<END
 <kml>
   <Document>
     <Folder>
@@ -22,11 +15,3 @@ RSpec.describe 'kmllib' do
     </Folder>
   </Document>
 </kml>
-END
-      expect(OldKML.extract_track(kml)).to match({
-        '2015-08-06T11:08:48.623Z' => [-3.2799208, 54.540783, 97.0],
-        '2015-08-06T11:08:50.623Z' => [-3.2798505, 54.540813, 114.0]
-      })
-    end
-  end
-end

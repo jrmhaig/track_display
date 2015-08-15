@@ -1,3 +1,5 @@
+require 'kml'
+
 class TracksController < ApplicationController
   before_action :set_track, only: [:show, :edit, :update, :destroy]
 
@@ -6,7 +8,12 @@ class TracksController < ApplicationController
   def index
     @tracks = Track.all
 
-    @track_data = Track.track_from_kml(File.read(Rails.root.join("data/test.kml")))
+    @new_tracks = []
+    Dir['data/*.kml'].each do |file|
+      @new_tracks << KML.new(file)
+    end
+    #@track_data = Track.track_from_kml(File.read(Rails.root.join("data/test.kml")))
+    @track_data = []
   end
 
   # GET /tracks/1
@@ -61,6 +68,12 @@ class TracksController < ApplicationController
       format.html { redirect_to tracks_url, notice: 'Track was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def import
+    track_data = KML.new(params[:file])
+    params[:track] = {title: track_data.name}
+    self.create
   end
 
   private

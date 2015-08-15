@@ -2,7 +2,7 @@
 
 <h1>Listing Tracks</h1>
 
-<table>
+<table class='table'>
   <thead>
     <tr>
       <th>Title</th>
@@ -21,13 +21,25 @@
     <% end %>
   </tbody>
 
-  <div>
-    <dl>
-    <% @track_data.each do |t, c| -%>
-      <dt><%= t %></dt><dd><%= c %><dt>
-    <% end -%>
-    </dl>
-  </div>
+</table>
+
+<table class='table'>
+  <tr>
+    <th>Track name</th>
+    <th>Nodes</td>
+    <th></th>
+  </tr>
+  <% @new_tracks.each do |trk| -%>
+    <tr>
+      <td><%= trk.name %></td>
+      <td><%= trk.nodes.count %></td>
+      <td><form role="form" method="POST" action="<%= tracks_path %>/import" />
+        <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden" />
+        <input type="hidden" name="file" value="<%= trk.filename %>" />
+        <input type="submit" value="Import" class="btn btn-success"/>
+      </form></td>
+    </tr>
+  <% end %>
 </table>
 
 <br>
