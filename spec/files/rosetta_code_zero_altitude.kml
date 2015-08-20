@@ -1,0 +1,17 @@
+<kml>
+  <Document>
+    <Folder>
+      <name>Test track</name>
+      <Placemark>
+        <name>Track</name>
+        <gx:Track>
+          <altitudeMode>absolute</altitudeMode>
+          <when>2015-08-06T11:08:48.623Z</when>
+          <when>2015-08-06T11:08:50.623Z</when>
+          <gx:coord>36.12 -86.67 0.0</gx:coord>
+          <gx:coord>33.94 -118.4 0.0</gx:coord>
+        </gx:Track>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>

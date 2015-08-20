@@ -3,87 +3,45 @@ require 'rails_helper'
 RSpec.describe Track, type: :model do
   describe '#create_from_kml' do
     it 'creates a new track from kml' do
-      kml = <<END
-<kml>
-  <Document>
-    <Folder>
-      <name>Test track</name>
-      <Placemark>
-        <name>Track</name>
-        <gx:Track>
-          <altitudeMode>absolute</altitudeMode>
-        </gx:Track>
-      </Placemark>
-    </Folder>
-  </Document>
-</kml>
-END
-      expect{ Track.create_from_kml(kml) }.to change{ Track.count }.by(1)
+      expect{ Track.create_from_file('spec/files/simple.kml') }.to change{ Track.count }.by(1)
     end
 
     it 'returns a track' do
-      kml = <<END
-<kml>
-  <Document>
-    <Folder>
-      <name>Test track</name>
-      <Placemark>
-        <name>Track</name>
-        <gx:Track>
-          <altitudeMode>absolute</altitudeMode>
-        </gx:Track>
-      </Placemark>
-    </Folder>
-  </Document>
-</kml>
-END
-      expect(Track.create_from_kml(kml)).to be_a(Track)
+      expect(Track.create_from_file('spec/files/simple.kml')).to be_a(Track)
     end
 
     it 'creates 2 nodes' do
-      kml = <<END
-<kml>
-  <Document>
-    <Folder>
-      <name>Test track</name>
-      <Placemark>
-        <name>Track</name>
-        <gx:Track>
-          <altitudeMode>absolute</altitudeMode>
-          <when>2015-08-06T11:08:48.623Z</when>
-          <when>2015-08-06T11:08:50.623Z</when>
-          <gx:coord>-3.2799208 54.540783 97.0</gx:coord>
-          <gx:coord>-3.2798505 54.540813 114.0</gx:coord>
-        </gx:Track>
-      </Placemark>
-    </Folder>
-  </Document>
-</kml>
-END
-      expect{ Track.create_from_kml(kml) }.to change{ Node.count }.by(2)
+      expect{ Track.create_from_file('spec/files/simple.kml') }.to change{ Node.count }.by(2)
     end
 
     it 'creates a track with 2 nodes' do
-      kml = <<END
-<kml>
-  <Document>
-    <Folder>
-      <name>Test track</name>
-      <Placemark>
-        <name>Track</name>
-        <gx:Track>
-          <altitudeMode>absolute</altitudeMode>
-          <when>2015-08-06T11:08:48.623Z</when>
-          <when>2015-08-06T11:08:50.623Z</when>
-          <gx:coord>-3.2799208 54.540783 97.0</gx:coord>
-          <gx:coord>-3.2798505 54.540813 114.0</gx:coord>
-        </gx:Track>
-      </Placemark>
-    </Folder>
-  </Document>
-</kml>
-END
-      expect(Track.create_from_kml(kml).nodes.count).to eq(2)
+      expect(Track.create_from_file('spec/files/simple.kml').nodes.count).to eq(2)
+    end
+  end
+
+  describe '#node_delta' do
+    # Using the example from http://rosettacode.org/wiki/Haversine_formula
+    let(:track) { Track.create_from_file('spec/files/rosetta_code_zero_altitude.kml') }
+    let(:node) { Fabricate(:node) }
+
+    it 'calculates the distance between a node and the previous' do
+      expect(track.node_delta(track.nodes[1])).to be_between(2886444.4, 2886444.5)
+    end
+
+    it 'returns zero delta for the starting point' do
+      expect(track.node_delta(track.nodes[0])).to eq 0
+    end
+
+    it 'calculates the distance between a node by number and the previous' do
+      expect(track.node_delta(1)).to be_between(2886444.4, 2886444.5)
+    end
+
+    it 'returns zero delta for the starting point by number' do
+      expect(track.node_delta(0)).to eq 0
+    end
+
+    it 'returns zero delta for a node not in the track' do
+      expect(track.node_delta(node)).to eq 0
     end
   end
 

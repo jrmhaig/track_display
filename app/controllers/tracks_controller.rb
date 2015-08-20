@@ -1,4 +1,5 @@
 require 'kml'
+require 'gruff'
 
 class TracksController < ApplicationController
   before_action :set_track, only: [:show, :edit, :update, :destroy]
@@ -19,6 +20,28 @@ class TracksController < ApplicationController
   # GET /tracks/1
   # GET /tracks/1.json
   def show
+    @altitude_file = "graphs/#{@track.id}-altitude.png"
+    @altitude_thumbnail_file = "graphs/#{@track.id}-altitude-thumbnail.png"
+    altitude_path = File.expand_path("images/#{@altitude_file}", Rails.public_path)
+    altitude_thumbnail_path = File.expand_path("images/#{@altitude_thumbnail_file}", Rails.public_path)
+    if ! (File.exists?(altitude_path) and File.exists?(altitude_thumbnail_path))
+      image = Gruff::Line.new
+      image.title = 'Altitude'
+      t_start = Time.parse(@track.nodes.first.time.to_s).to_i
+      puts "Start: #{@track.nodes.first.inspect}"
+      puts "End: #{@track.nodes.last.inspect}"
+      t_range = Time.parse(@track.nodes.last.time.to_s).to_i - t_start
+      image.dataxy('Altitude', @track.nodes.map{ |n| [Time.parse(n.time.to_s).to_i - t_start, n.alt] })
+      (t_range/3600 + 1).times do |i|
+        image.labels[i*3600] = "#{i}"
+      end
+      image.x_axis_label = 'Hours'
+      image.y_axis_label = 'Meters'
+      image.minimum_value = 0
+      image.write(altitude_path)
+      image.resize(0.5)
+      image.write(altitude_thumbnail_path)
+    end
   end
 
   # GET /tracks/new

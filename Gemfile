@@ -51,3 +51,6 @@ end
 gem 'bootstrap-sass', '~> 3.2.0'
 gem 'autoprefixer-rails'
 gem 'nokogiri'
+# Awaiting a response to https://github.com/topfunky/gruff/pull/130
+#gem 'gruff', git: 'https://www.github.com/jrmhaig/gruff.git'
+gem 'gruff', git: 'git@github.com:jrmhaig/gruff.git'

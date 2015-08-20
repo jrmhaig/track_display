@@ -17,3 +17,5 @@
 /tmp
 
 /coverage
+/public/images/graphs/*
+!/public/images/graphs/.keep

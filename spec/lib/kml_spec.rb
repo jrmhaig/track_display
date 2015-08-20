@@ -22,20 +22,23 @@ RSpec.describe 'kml' do
     end
 
     it 'extracts the node data' do
-      expect(KML.new("spec/files/simple.kml").nodes).to match([
+      kml = KML.new("spec/files/simple.kml")
+      expect(kml.nodes[0]).to include(
         {
           time: '2015-08-06T11:08:48.623Z',
           lat: -3.2799208,
           long: 54.540783,
           alt: 97.0
-        },
+        }
+      )
+      expect(kml.nodes[1]).to include(
         {
           time: '2015-08-06T11:08:50.623Z',
           lat: -3.2798505,
           long: 54.540813,
           alt: 114.0
         }
-      ])
+      )
     end
   end
 end
